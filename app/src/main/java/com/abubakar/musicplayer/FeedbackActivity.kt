@@ -1,4 +1,4 @@
-package com.harshRajpurohit.musicPlayer
+package com.abubakar.musicplayer
 
 //Not Used Now
 
@@ -7,7 +7,7 @@ package com.harshRajpurohit.musicPlayer
 //import android.os.Bundle
 //import android.widget.Toast
 //import androidx.appcompat.app.AppCompatActivity
-//import com.harshRajpurohit.musicPlayer.databinding.ActivityFeedbackBinding
+//import com.abubakar.musicplayer.databinding.ActivityFeedbackBinding
 //import java.util.*
 //import javax.mail.*
 //import javax.mail.internet.InternetAddress

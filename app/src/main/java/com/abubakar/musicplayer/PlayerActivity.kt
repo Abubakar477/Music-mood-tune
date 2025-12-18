@@ -1,4 +1,4 @@
-package com.harshRajpurohit.musicPlayer
+package com.abubakar.musicplayer
 
 import android.annotation.SuppressLint
 import android.content.ComponentName
@@ -27,8 +27,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.harshRajpurohit.musicPlayer.databinding.ActivityPlayerBinding
-import com.harshRajpurohit.musicPlayer.databinding.AudioBoosterBinding
+import com.abubakar.musicplayer.databinding.ActivityPlayerBinding
+import com.abubakar.musicplayer.databinding.AudioBoosterBinding
 
 class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompletionListener {
 

@@ -1,10 +1,10 @@
-package com.harshRajpurohit.musicPlayer
+package com.abubakar.musicplayer
 
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.harshRajpurohit.musicPlayer.databinding.ActivityPlayNextBinding
+import com.abubakar.musicplayer.databinding.ActivityPlayNextBinding
 
 class PlayNext : AppCompatActivity() {
 
