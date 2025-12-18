@@ -6,7 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/gradient_blue">
 
 
 <!--    for refreshing layout on swipe from top-->
@@ -26,61 +27,74 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <!--for buttons-->
-                <LinearLayout
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <!--shuffle Button-->
-                    <Button
-                        android:id="@+id/shuffleBtn"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:contentDescription="@string/shuffle_btn"
-                        android:drawableTop="@drawable/shuffle_icon"
-                        android:text="@string/shuffle_btn"
-                        android:textAllCaps="false"
-                        android:textColor="?colorOnPrimary" />
-                    <!--Favourites Button-->
-                    <Button
-                        android:id="@+id/favouriteBtn"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:contentDescription="@string/favourites_btn"
-                        android:drawableTop="@drawable/favourite_icon"
-                        android:text="@string/favourites_btn"
-                        android:textAllCaps="false"
-                        android:textColor="?colorOnPrimary" />
-                    <!--Playlists Button-->
-                    <Button
-                        android:id="@+id/playlistBtn"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:contentDescription="@string/playlist_btn"
-                        android:drawableTop="@drawable/playlist_icon"
-                        android:text="@string/playlist_btn"
-                        android:textAllCaps="false"
-                        android:textColor="?colorOnPrimary" />
+                    android:layout_margin="10dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp"
+                    app:cardBackgroundColor="?colorPrimary">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:orientation="horizontal">
+                        <!--shuffle Button-->
+                        <Button
+                            android:id="@+id/shuffleBtn"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:contentDescription="@string/shuffle_btn"
+                            android:drawableTop="@drawable/shuffle_icon"
+                            android:text="@string/shuffle_btn"
+                            android:textAllCaps="false"
+                            android:textColor="#FF0000"
+                            app:drawableTint="@color/black"/>
+                        <!--Favourites Button-->
+                        <Button
+                            android:id="@+id/favouriteBtn"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:contentDescription="@string/favourites_btn"
+                            android:drawableTop="@drawable/favourite_icon"
+                            android:text="@string/favourites_btn"
+                            android:textAllCaps="false"
+                            android:textColor="#FF0000"
+                            app:drawableTint="@color/black"/>
+                        <!--Playlists Button-->
+                        <Button
+                            android:id="@+id/playlistBtn"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:contentDescription="@string/playlist_btn"
+                            android:drawableTop="@drawable/playlist_icon"
+                            android:text="@string/playlist_btn"
+                            android:textAllCaps="false"
+                            android:textColor="#FF0000"
+                            app:drawableTint="@color/black"/>
 
-                    <!--Play Next Button-->
-                    <Button
-                        android:id="@+id/playNextBtn"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:contentDescription="@string/playlist_btn"
-                        android:drawableTop="@drawable/play_next_icon"
-                        android:text="@string/play_next"
-                        android:textAllCaps="false"
-                        android:textColor="?colorOnPrimary" />
+                        <!--Play Next Button-->
+                        <Button
+                            android:id="@+id/playNextBtn"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:contentDescription="@string/playlist_btn"
+                            android:drawableTop="@drawable/play_next_icon"
+                            android:text="@string/play_next"
+                            android:textAllCaps="false"
+                            android:textColor="#FF0000"
+                            app:drawableTint="@color/black"/>
 
-                </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
                 <!--Total Songs Button-->
                 <TextView
@@ -89,7 +103,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:text="@string/total_songs"
-                    android:textColor="?colorOnPrimary" />
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="#FF0000" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/musicRV"
@@ -106,7 +122,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:name="com.harshRajpurohit.musicPlayer.NowPlaying"
+                android:name="com.abubakar.musicplayer.NowPlaying"
                 tools:layout="@layout/fragment_now_playing"
                 android:visibility="gone"/>
         </androidx.constraintlayout.widget.ConstraintLayout>

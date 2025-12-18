@@ -218,8 +218,8 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCom
             )
         }
         val bgColor = getMainColor(image)
-        val gradient = GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, intArrayOf(0xFFFFFF, bgColor))
-        binding.root.background = gradient
+        //val gradient = GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, intArrayOf(0xFFFFFF, bgColor))
+        //binding.root.background = gradient
         window?.statusBarColor = bgColor
     }
 

@@ -6,7 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".PlayerActivity"
     android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    android:background="@drawable/gradient_blue">
 
 <!--    First Row-->
     <LinearLayout
@@ -58,7 +59,7 @@
         android:layout_height="250dp"
         android:layout_margin="10dp"
         android:padding="5dp"
-        android:src="@drawable/music_player_icon_slash_screen"
+        android:src="@drawable/whatsapp_image_2025_12_18_at_8_41_15_am"
         app:shapeAppearanceOverlay="@style/curved"
         app:strokeColor="@color/cool_blue"
         app:strokeWidth="5dp"/>
@@ -71,7 +72,7 @@
         android:layout_marginHorizontal="20dp"
         android:text="@string/song_name"
         android:textSize="18sp"
-        android:textColor="?colorOnPrimary"
+        android:textColor="@color/black"
         android:gravity="center"
         android:layout_weight="1"
         android:textIsSelectable="true" />
@@ -103,7 +104,7 @@
             android:layout_marginHorizontal="25dp"
             app:shapeAppearanceOverlay="@style/curved"
             android:backgroundTint="@android:color/holo_red_light"
-            app:iconTint="@color/white"/>
+            app:iconTint="@color/yellow"/>
 
 <!--        Next Button-->
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton

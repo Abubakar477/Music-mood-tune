@@ -73,6 +73,23 @@ class FavouriteAdapter(private val context: Context, private var musicList: Arra
                 intent.putExtra("class", "FavouriteAdapter")
                 ContextCompat.startActivity(context, intent, null)
             }
+            holder.root.setOnLongClickListener {
+                val customDialog = LayoutInflater.from(context).inflate(R.layout.more_features, holder.root, false)
+                val bindingMF = MoreFeaturesBinding.bind(customDialog)
+                val dialog = MaterialAlertDialogBuilder(context).setView(customDialog)
+                    .create()
+                dialog.show()
+                dialog.window?.setBackgroundDrawable(ColorDrawable(0x99000000.toInt()))
+                bindingMF.AddToPNBtn.text = "Remove"
+                bindingMF.AddToPNBtn.setOnClickListener {
+                    musicList.removeAt(position)
+                    FavouriteActivity.favouriteSongs.removeAt(position)
+                    FavouriteActivity.favouritesChanged = true
+                    notifyItemRemoved(position)
+                    dialog.dismiss()
+                }
+                return@setOnLongClickListener true
+            }
         }
     }
 

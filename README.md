@@ -65,5 +65,4 @@ This project is much more improved and optimized than the YouTube course project
 
 ## 💬 Feedback and Suggestions
 
-For any feedback or suggestions, feel free to contact me via email:  
-📧 [rajpurohitharsh2020@gmail.com](mailto:rajpurohitharsh2020@gmail.com)
+For any feedback or suggestions, feel free to contact me.

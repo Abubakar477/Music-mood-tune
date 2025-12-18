@@ -9,7 +9,8 @@
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
 
     <!-- Notification-->
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"
+        tools:ignore="ForegroundServicesPolicy" />
 
     <!-- Notification Permission for Android 14 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
@@ -18,10 +19,10 @@
     <application
         android:name=".ApplicationClass"
         android:allowBackup="true"
-        android:icon="@mipmap/music_player_icon"
+        android:icon="@drawable/bb"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/music_player_icon_round"
+        android:roundIcon="@drawable/bb"
         android:supportsRtl="true"
         android:theme="@style/splash_screen"
         tools:ignore="AllowBackup">

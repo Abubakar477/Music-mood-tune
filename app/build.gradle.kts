@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.harshRajpurohit.musicPlayer"
+    namespace = "com.abubakar.musicplayer"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.harshRajpurohit.musicPlayer"
+        applicationId = "com.abubakar.musicplayer"
         minSdk = 21
         targetSdk = 34
         versionCode = 11

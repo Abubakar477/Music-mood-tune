@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AboutActivity">
+    tools:context=".AboutActivity"
+    android:background="@drawable/whatsapp_image_2025_12_18_at_8_31_25_am">
 
     <TextView
         android:id="@+id/aboutText"
