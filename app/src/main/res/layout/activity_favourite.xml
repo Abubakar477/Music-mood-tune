@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FavouriteActivity"
-    android:background="@drawable/gradient_blue">
+    android:background="@color/spotify_black">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -15,58 +15,58 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="?attr/themeColor"
-        android:layout_marginTop="2dp">
+        android:background="@color/spotify_black"
+        android:padding="16dp">
 
         <ImageButton
             android:id="@+id/backBtnFA"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/back_icon"
             android:contentDescription="@string/back_btn"
-            android:backgroundTint="@android:color/transparent"
-            app:tint="@color/white"
-            android:padding="5dp"/>
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/white"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:contentDescription="@string/favourites_btn"
             android:gravity="center"
             android:text="@string/favourites_btn"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
+            
+        <View android:layout_width="40dp" android:layout_height="40dp" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favouriteRV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linearLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:scrollbarThumbVertical="@drawable/scroll_bar_icon"
         android:scrollbars="vertical"
-        android:paddingBottom="40dp"
-        android:layout_marginTop="10dp"/>
+        android:paddingBottom="80dp"
+        android:clipToPadding="false"/>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/shuffleBtnFA"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/spotify_green"
         app:icon="@drawable/shuffle_icon"
-        app:iconSize="35dp"
-        app:iconTint="?attr/themeColor"
+        app:iconSize="24dp"
+        app:iconTint="@color/white"
+        android:text="@string/shuffle_btn"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9"
-        app:strokeWidth="2dp"
-        app:strokeColor="?attr/themeColor"/>
+        android:layout_margin="24dp"/>
 
     <TextView
         android:id="@+id/instructionFV"
@@ -77,10 +77,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:text="@string/favourite_note"
-        android:textSize="20sp"
-        android:padding="16dp"
+        android:textSize="16sp"
+        android:padding="32dp"
         android:gravity="center"
-        android:textColor="?attr/dialogBtnBackground"
+        android:textColor="@color/spotify_light_gray"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-<!--    <item android:id="@+id/navFeedback"-->
-<!--        android:title="@string/feedback"-->
-<!--        android:icon="@drawable/feedback_icon"/>-->
+    <item android:id="@+id/navHome"
+        android:title="Home"
+        android:icon="@drawable/music_icon"/>
+
+    <item android:id="@+id/navLibrary"
+        android:title="Your Library"
+        android:icon="@drawable/playlist_icon"/>
+        
+    <item android:id="@+id/navFavourites"
+        android:title="Liked Songs"
+        android:icon="@drawable/favourite_icon"/>
 
     <item android:id="@+id/navSettings"
         android:title="@string/settings"
@@ -12,6 +20,10 @@
     <item android:id="@+id/navAbout"
         android:title="@string/about"
         android:icon="@drawable/about_icon"/>
+
+    <item android:id="@+id/navLogout"
+        android:title="@string/logout"
+        android:icon="@drawable/exit_icon"/>
 
     <item android:id="@+id/navExit"
         android:title="@string/exit"

@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".NowPlaying"
-    app:cardBackgroundColor="#282828"
+    app:cardBackgroundColor="@color/spotify_card"
     app:cardCornerRadius="8dp"
     app:cardElevation="8dp"
     android:layout_margin="8dp">
@@ -17,8 +17,8 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/songImgNP"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/roundedImageView"
@@ -46,9 +46,10 @@
                 android:singleLine="true"/>
             
             <TextView
+                android:id="@+id/songArtistNP"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Now Playing"
+                android:text="Artist"
                 android:textSize="12sp"
                 android:textColor="#B3B3B3"
                 android:singleLine="true"/>
@@ -63,25 +64,28 @@
             android:layout_centerVertical="true"
             android:gravity="center_vertical">
 
+            <!-- Play Button -->
             <ImageButton
                 android:id="@+id/playPauseBtnNP"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/play_icon"
                 app:tint="@color/white"
                 android:scaleType="fitCenter"
-                android:padding="8dp"/>
+                android:padding="4dp"
+                android:layout_marginEnd="8dp"/>
 
+            <!-- Next Button -->
             <ImageButton
                 android:id="@+id/nextBtnNP"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/next_icon"
                 app:tint="@color/white"
                 android:scaleType="fitCenter"
-                android:padding="8dp"/>
+                android:padding="4dp"/>
 
         </LinearLayout>
 

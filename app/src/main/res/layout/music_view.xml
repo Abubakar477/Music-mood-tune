@@ -12,11 +12,11 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:src="@drawable/music_player_icon_slash_screen"
+        android:scaleType="centerCrop"
         app:shapeAppearanceOverlay="@style/roundedImageView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:scaleType="centerCrop"/>
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <LinearLayout
         android:layout_width="0dp"
@@ -43,7 +43,7 @@
             android:id="@+id/songAlbumMV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Artist • Album"
+            android:text="Artist"
             android:textColor="#B3B3B3"
             android:textSize="14sp"
             android:singleLine="true"

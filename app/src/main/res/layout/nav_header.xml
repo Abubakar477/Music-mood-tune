@@ -4,24 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="170dp"
     android:padding="16dp"
-    android:background="@color/cool_pink"
+    android:background="@color/spotify_black"
     android:orientation="vertical"
     android:layout_marginTop="55dp">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:paddingTop="15dp"
-        android:src="@mipmap/music_player_icon_round"
+        android:src="@drawable/cc"
         android:contentDescription="@string/app_icon"/>
 
     <TextView
         android:id="@+id/userEmailNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="5dp"
+        android:paddingTop="10dp"
         android:text="@string/text_nav"
         android:textSize="18sp"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:textStyle="bold"/>
 
 </LinearLayout>

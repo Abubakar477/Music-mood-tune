@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SelectionActivity"
-    android:background="@drawable/gradient_blue">
+    android:background="@color/spotify_black">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -15,17 +15,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="2dp">
+        android:layout_marginTop="2dp"
+        android:padding="8dp">
 
         <ImageButton
             android:id="@+id/backBtnSA"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/back_icon"
             android:contentDescription="@string/back_btn"
-            android:backgroundTint="?colorOnPrimary"
-            app:tint="@color/black"
-            android:layout_margin="5dp"/>
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/white"
+            android:layout_gravity="center_vertical"/>
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchViewSA"
@@ -36,17 +37,18 @@
             android:focusable="false"
             app:iconifiedByDefault="false"
             android:background="@drawable/custom_search_view"
-            android:layout_margin="5dp"
+            android:layout_marginStart="10dp"
             app:closeIcon="@null"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/selectionRV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linearLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:scrollbarThumbVertical="@drawable/scroll_bar_icon"
         android:scrollbars="vertical"
         android:paddingBottom="50dp"

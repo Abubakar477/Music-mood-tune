@@ -16,14 +16,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.abubakar.musicplayer.MusicAdapter.MyHolder
 import com.abubakar.musicplayer.databinding.DetailsViewBinding
 import com.abubakar.musicplayer.databinding.MoreFeaturesBinding
 import com.abubakar.musicplayer.databinding.MusicViewBinding
 
 class MusicAdapter(private val context: Context, private var musicList: ArrayList<Music>, private val playlistDetails: Boolean = false,
 private val selectionActivity: Boolean = false)
-    : RecyclerView.Adapter<MyHolder>() {
+    : RecyclerView.Adapter<MusicAdapter.MyHolder>() {
 
     class MyHolder(binding: MusicViewBinding) : RecyclerView.ViewHolder(binding.root) {
         val title = binding.songNameMV
@@ -39,12 +38,18 @@ private val selectionActivity: Boolean = false)
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
         holder.title.text = musicList[position].title
-        holder.album.text = musicList[position].album
+        holder.album.text = musicList[position].artist
         holder.duration.text = formatDuration(musicList[position].duration)
         Glide.with(context)
             .load(musicList[position].artUri)
             .apply(RequestOptions().placeholder(R.drawable.music_player_icon_slash_screen).centerCrop())
             .into(holder.image)
+
+        // Highlight the currently playing song
+        if(musicList[position].id == PlayerActivity.nowPlayingId)
+            holder.title.setTextColor(ContextCompat.getColor(context, R.color.spotify_green))
+        else
+            holder.title.setTextColor(ContextCompat.getColor(context, R.color.white))
 
         //for play next feature
         if(!selectionActivity)
@@ -76,8 +81,8 @@ private val selectionActivity: Boolean = false)
                     dialog.dismiss()
                     val detailsDialog = LayoutInflater.from(context).inflate(R.layout.details_view, bindingMF.root, false)
                     val binder = DetailsViewBinding.bind(detailsDialog)
-                    binder.detailsTV.setTextColor(Color.WHITE)
-                    binder.root.setBackgroundColor(Color.TRANSPARENT)
+                    binder.detailsTV.setTextColor(Color.BLACK)
+                    binder.root.setBackgroundColor(Color.WHITE)
                     val dDialog = MaterialAlertDialogBuilder(context)
 //                        .setBackground(ColorDrawable(0x99000000.toInt()))
                         .setView(detailsDialog)
@@ -107,9 +112,9 @@ private val selectionActivity: Boolean = false)
             selectionActivity ->{
                 holder.root.setOnClickListener {
                     if(addSong(musicList[position]))
-                        holder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.cool_pink))
+                        holder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.spotify_green))
                     else
-                        holder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.white))
+                        holder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.spotify_black))
 
                 }
             }

@@ -70,14 +70,7 @@ class MainActivity : AppCompatActivity() {
         binding.root.addDrawerListener(toggle)
         toggle.syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        
-        // Update Nav Header with User Email
-        val sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val userEmail = sharedPref.getString("USER_EMAIL", "Welcome")
-        val headerView = binding.navView.getHeaderView(0)
-        val navUserEmail = headerView.findViewById<TextView>(R.id.userEmailNav)
-        navUserEmail.text = userEmail
-        
+
         //checking for dark theme
         if(themeIndex == 4 &&  resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO)
             Toast.makeText(this, "Black Theme Works Best in Dark Mode!!", Toast.LENGTH_LONG).show()
@@ -122,6 +115,11 @@ class MainActivity : AppCompatActivity() {
 //                R.id.navFeedback -> startActivity(Intent(this@MainActivity, FeedbackActivity::class.java))
                 R.id.navSettings -> startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
                 R.id.navAbout -> startActivity(Intent(this@MainActivity, AboutActivity::class.java))
+                R.id.navLogout -> {
+                    auth.signOut()
+                    startActivity(Intent(this, LoginActivity::class.java))
+                    finish()
+                }
                 R.id.navExit -> {
                     val builder = MaterialAlertDialogBuilder(this)
                     builder.setTitle("Exit")
@@ -233,8 +231,8 @@ class MainActivity : AppCompatActivity() {
                     val uri = Uri.parse("content://media/external/audio/albumart")
                     val artUriC = Uri.withAppendedPath(uri, albumIdC).toString()
 
-                    // Only add the music file if the duration is greater than 0
-                    if (durationC > 0) {
+                    // Only add the music file if the duration is greater than 31 seconds (31000 ms)
+                    if (durationC > 31000) {
                         val music = Music(
                             id = idC,
                             title = titleC,

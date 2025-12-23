@@ -16,7 +16,8 @@
     
     <!-- Spotify Colors -->
     <color name="spotify_green">#1DB954</color>
-    <color name="spotify_black">#191414</color>
+    <color name="spotify_black">#121212</color>
+    <color name="spotify_card">#282828</color>
     <color name="spotify_dark_gray">#535353</color>
     <color name="spotify_light_gray">#B3B3B3</color>
 </resources>

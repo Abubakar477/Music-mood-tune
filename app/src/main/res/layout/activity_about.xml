@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AboutActivity"
-    android:background="@drawable/whatsapp_image_2025_12_18_at_8_31_25_am">
+    android:background="@color/spotify_light_gray">
 
     <TextView
         android:id="@+id/aboutText"
