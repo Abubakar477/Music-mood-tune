@@ -1,57 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".NowPlaying"
-    android:background="?attr/themeColor">
+    app:cardBackgroundColor="#282828"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp"
+    android:layout_margin="8dp">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/songImgNP"
-        android:layout_width="70dp"
-        android:layout_height="55dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="5dp"
-        app:shapeAppearanceOverlay="@style/curved"
-        android:src="@drawable/music_player_icon_slash_screen"/>
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/nextBtnNP"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        app:icon="@drawable/next_icon"
-        app:iconTint="@color/white"
-        android:backgroundTint="?attr/themeColor"
-        android:layout_centerVertical="true"
-        app:iconSize="40dp"
-        android:layout_marginEnd="10dp"/>
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/playPauseBtnNP"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:icon="@drawable/play_icon"
-        app:iconTint="@color/white"
-        android:backgroundTint="?attr/themeColor"
-        android:layout_centerVertical="true"
-        app:iconSize="40dp"
-        android:layout_toStartOf="@id/nextBtnNP"
-        android:layout_marginHorizontal="5dp"/>
-    <TextView
-        android:id="@+id/songNameNP"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="@string/song_name"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_toStartOf="@id/playPauseBtnNP"
-        android:layout_toEndOf="@id/songImgNP"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:singleLine="true"/>
+        android:layout_height="wrap_content"
+        android:padding="8dp">
 
-</RelativeLayout>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/songImgNP"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/roundedImageView"
+            android:src="@drawable/music_player_icon_slash_screen"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/songImgNP"
+            android:layout_toStartOf="@id/controlsLayout"
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
+            android:paddingHorizontal="12dp">
+
+            <TextView
+                android:id="@+id/songNameNP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/song_name"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true"/>
+            
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Now Playing"
+                android:textSize="12sp"
+                android:textColor="#B3B3B3"
+                android:singleLine="true"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/controlsLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/playPauseBtnNP"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/play_icon"
+                app:tint="@color/white"
+                android:scaleType="fitCenter"
+                android:padding="8dp"/>
+
+            <ImageButton
+                android:id="@+id/nextBtnNP"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/next_icon"
+                app:tint="@color/white"
+                android:scaleType="fitCenter"
+                android:padding="8dp"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

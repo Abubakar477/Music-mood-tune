@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:layout_marginTop="55dp">
 
-    0<ImageView
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="15dp"
@@ -16,6 +16,7 @@
         android:contentDescription="@string/app_icon"/>
 
     <TextView
+        android:id="@+id/userEmailNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="5dp"

@@ -148,7 +148,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             mediaPlayer?.setDataSource(PlayerActivity.musicListPA[PlayerActivity.songPosition].path)
             mediaPlayer?.prepare()
 
-            PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
+            PlayerActivity.binding.playPauseBtnPA.setImageResource(R.drawable.pause_icon)
             showNotification(R.drawable.pause_icon)
             PlayerActivity.binding.tvSeekBarStart.text =
                 formatDuration(mediaPlayer!!.currentPosition.toLong())
@@ -234,8 +234,8 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
 
     private fun playMusic(){
         //play music
-        PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
-        NowPlaying.binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
+        PlayerActivity.binding.playPauseBtnPA.setImageResource(R.drawable.pause_icon)
+        NowPlaying.binding.playPauseBtnNP.setImageResource(R.drawable.pause_icon)
         PlayerActivity.isPlaying = true
         mediaPlayer?.start()
         showNotification(R.drawable.pause_icon)
@@ -243,8 +243,8 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
 
     private fun pauseMusic(){
         //pause music
-        PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.play_icon)
-        NowPlaying.binding.playPauseBtnNP.setIconResource(R.drawable.play_icon)
+        PlayerActivity.binding.playPauseBtnPA.setImageResource(R.drawable.play_icon)
+        NowPlaying.binding.playPauseBtnNP.setImageResource(R.drawable.play_icon)
         PlayerActivity.isPlaying = false
         mediaPlayer!!.pause()
         showNotification(R.drawable.play_icon)

@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.abubakar.musicplayer" />
+                  <option name="mobileSdkAppId" value="1:851632860026:android:817ec73c88679fd53e84c3" />
+                  <option name="projectId" value="music-player-290be" />
+                  <option name="projectNumber" value="851632860026" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

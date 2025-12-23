@@ -118,29 +118,29 @@
         <item name="dialogTextColor">@color/white</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
-    //new dark Theme
+    //new dark Theme / Spotify Style
     <style name="coolBlack" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="themeColor">@color/black</item>
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="themeColor">@color/spotify_black</item>
+        <item name="colorPrimary">@color/spotify_green</item>
+        <item name="colorPrimaryVariant">@color/spotify_black</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorSecondary">@color/spotify_green</item>
+        <item name="colorSecondaryVariant">@color/spotify_green</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="android:statusBarColor" tools:targetApi="l">?attr/themeColor</item>
-        <item name="dialogBtnBackground">@color/white</item>
-        <item name="dialogTextColor">@color/black</item>
+        <item name="dialogBtnBackground">@color/spotify_green</item>
+        <item name="dialogTextColor">@color/white</item>
     </style>
     <style name="coolBlackNav" parent="Theme.MaterialComponents.DayNight">
-        <item name="themeColor">@color/black</item>
-        <item name="colorPrimary">@color/white</item>
-        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="themeColor">@color/spotify_black</item>
+        <item name="colorPrimary">@color/spotify_green</item>
+        <item name="colorPrimaryVariant">@color/spotify_black</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorSecondary">@color/cool_pink</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorSecondary">@color/spotify_green</item>
+        <item name="colorSecondaryVariant">@color/spotify_green</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="android:statusBarColor" tools:targetApi="l">?attr/themeColor</item>
-        <item name="dialogBtnBackground">@color/white</item>
-        <item name="dialogTextColor">@color/black</item>
+        <item name="dialogBtnBackground">@color/spotify_green</item>
+        <item name="dialogTextColor">@color/white</item>
     </style>
 </resources>

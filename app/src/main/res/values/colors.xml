@@ -13,4 +13,10 @@
     <color name="cool_green">#64DD17</color>
     <color name="cool_pink">#F50057</color>
     <color name="yellow">#FFD600</color>
+    
+    <!-- Spotify Colors -->
+    <color name="spotify_green">#1DB954</color>
+    <color name="spotify_black">#191414</color>
+    <color name="spotify_dark_gray">#535353</color>
+    <color name="spotify_light_gray">#B3B3B3</color>
 </resources>

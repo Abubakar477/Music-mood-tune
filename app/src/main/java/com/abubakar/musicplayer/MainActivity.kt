@@ -1,6 +1,7 @@
 package com.abubakar.musicplayer
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -12,6 +13,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -23,12 +25,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.abubakar.musicplayer.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var musicAdapter: MusicAdapter
+    private lateinit var auth: FirebaseAuth
 
     companion object{
         lateinit var MusicListMA : ArrayList<Music>
@@ -53,11 +57,27 @@ class MainActivity : AppCompatActivity() {
         setTheme(currentThemeNav[themeIndex])
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        auth = FirebaseAuth.getInstance()
+        if (auth.currentUser == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+
         //for nav drawer
         toggle = ActionBarDrawerToggle(this, binding.root,R.string.open, R.string.close)
         binding.root.addDrawerListener(toggle)
         toggle.syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        
+        // Update Nav Header with User Email
+        val sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        val userEmail = sharedPref.getString("USER_EMAIL", "Welcome")
+        val headerView = binding.navView.getHeaderView(0)
+        val navUserEmail = headerView.findViewById<TextView>(R.id.userEmailNav)
+        navUserEmail.text = userEmail
+        
         //checking for dark theme
         if(themeIndex == 4 &&  resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_NO)
             Toast.makeText(this, "Black Theme Works Best in Dark Mode!!", Toast.LENGTH_LONG).show()
