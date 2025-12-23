@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "851632860026",
+    "project_id": "music-player-290be",
+    "storage_bucket": "music-player-290be.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:851632860026:android:817ec73c88679fd53e84c3",
+        "android_client_info": {
+          "package_name": "com.abubakar.musicplayer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtA_5vMeEU1skm6gYF7FzBqRPf34izg_U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
