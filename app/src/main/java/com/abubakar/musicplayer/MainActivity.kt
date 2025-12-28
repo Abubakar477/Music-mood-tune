@@ -33,6 +33,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var musicAdapter: MusicAdapter
     private lateinit var auth: FirebaseAuth
+    private var searchView: SearchView? = null
+    private var searchItem: MenuItem? = null
 
     companion object{
         lateinit var MusicListMA : ArrayList<Music>
@@ -137,6 +139,36 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             true
+        }
+
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.bottom_nav_home -> {
+                    // Already in MainActivity, do nothing or scroll to top
+                    true
+                }
+                R.id.bottom_nav_search -> {
+                    val item = searchItem
+                    if (item != null) {
+                        item.expandActionView()
+                        searchView?.requestFocus()
+                    } else {
+                        Toast.makeText(this, "Search not available", Toast.LENGTH_SHORT).show()
+                    }
+                    true
+                }
+                R.id.bottom_nav_library -> {
+                    startActivity(Intent(this@MainActivity, PlaylistActivity::class.java))
+                    true
+                }
+                R.id.bottom_nav_create -> {
+                    val intent = Intent(this@MainActivity, PlaylistActivity::class.java)
+                    intent.putExtra("show_create_dialog", true)
+                    startActivity(intent)
+                    true
+                }
+                else -> false
+            }
         }
     }
     //For requesting permission
@@ -280,6 +312,8 @@ class MainActivity : AppCompatActivity() {
             musicAdapter.updateMusicList(MusicListMA)
         }
         if(PlayerActivity.musicService != null) binding.nowPlaying.visibility = View.VISIBLE
+
+        binding.bottomNavigationView.selectedItemId = R.id.bottom_nav_home
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -287,8 +321,9 @@ class MainActivity : AppCompatActivity() {
         //for setting gradient
         findViewById<LinearLayout>(R.id.linearLayoutNav)?.setBackgroundResource(currentGradient[themeIndex])
 
-        val searchView = menu?.findItem(R.id.searchView)?.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        searchItem = menu?.findItem(R.id.searchView)
+        searchView = searchItem?.actionView as SearchView
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean = true
             override fun onQueryTextChange(newText: String?): Boolean {
                 musicListSearch = ArrayList()

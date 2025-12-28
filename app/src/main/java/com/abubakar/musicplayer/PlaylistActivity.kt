@@ -36,6 +36,10 @@ class PlaylistActivity : AppCompatActivity() {
         binding.addPlaylistBtn.setOnClickListener { customAlertDialog() }
 
         if(musicPlaylist.ref.isNotEmpty()) binding.instructionPA.visibility = View.GONE
+        
+        if(intent.getBooleanExtra("show_create_dialog", false)) {
+            customAlertDialog()
+        }
     }
     private fun customAlertDialog(){
         val customDialog = LayoutInflater.from(this@PlaylistActivity).inflate(R.layout.add_playlist_dialog, binding.root, false)
@@ -45,11 +49,11 @@ class PlaylistActivity : AppCompatActivity() {
             .setTitle("Playlist Details")
             .setPositiveButton("ADD"){ dialog, _ ->
                 val playlistName = binder.playlistName.text
-                val createdBy = binder.yourName.text
-                if(playlistName != null && createdBy != null)
-                    if(playlistName.isNotEmpty() && createdBy.isNotEmpty())
+                val yourName = binder.yourName.text
+                if(playlistName != null && yourName != null)
+                    if(playlistName.isNotEmpty() && yourName.isNotEmpty())
                     {
-                        addPlaylist(playlistName.toString(), createdBy.toString())
+                        addPlaylist(playlistName.toString(), yourName.toString())
                     }
                 dialog.dismiss()
             }.create()

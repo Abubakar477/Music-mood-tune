@@ -30,7 +30,6 @@
                 app:title="Music Player" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <!--    for refreshing layout on swipe from top-->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
@@ -47,7 +46,6 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <!-- Greeting -->
                     <TextView
                         android:id="@+id/greetingText"
                         android:layout_width="match_parent"
@@ -60,7 +58,6 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="16dp"/>
 
-                    <!-- Grid of Shortcuts -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -68,14 +65,12 @@
                         android:paddingHorizontal="10dp"
                         android:paddingBottom="10dp">
 
-                        <!-- Row 1 -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:layout_marginBottom="8dp">
 
-                            <!-- Favourites Button -->
                             <com.google.android.material.card.MaterialCardView
                                 android:id="@+id/favouriteBtn"
                                 android:layout_width="0dp"
@@ -111,7 +106,6 @@
                                 </LinearLayout>
                             </com.google.android.material.card.MaterialCardView>
 
-                            <!-- Playlists Button -->
                             <com.google.android.material.card.MaterialCardView
                                 android:id="@+id/playlistBtn"
                                 android:layout_width="0dp"
@@ -148,13 +142,11 @@
 
                         </LinearLayout>
 
-                        <!-- Row 2 -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-                            <!-- Shuffle Button -->
                             <com.google.android.material.card.MaterialCardView
                                 android:id="@+id/shuffleBtn"
                                 android:layout_width="0dp"
@@ -189,7 +181,6 @@
                                 </LinearLayout>
                             </com.google.android.material.card.MaterialCardView>
 
-                            <!-- Play Next Button -->
                             <com.google.android.material.card.MaterialCardView
                                 android:id="@+id/playNextBtn"
                                 android:layout_width="0dp"
@@ -228,7 +219,6 @@
 
                     </LinearLayout>
 
-                    <!--Total Songs Text-->
                     <TextView
                         android:id="@+id/totalSongs"
                         android:layout_width="match_parent"
@@ -256,12 +246,25 @@
             android:id="@+id/nowPlaying"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:name="com.abubakar.musicplayer.NowPlaying"
             tools:layout="@layout/fragment_now_playing"
             android:visibility="gone"/>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/bottom_nav_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@android:color/black"
+            app:itemIconTint="@color/white"
+            app:itemTextColor="@color/white"
+            app:labelVisibilityMode="labeled" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
