@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -15,18 +16,29 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.abubakar.musicplayer.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.FaceDetection
+import com.google.mlkit.vision.face.FaceDetectorOptions
 import java.io.File
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -35,6 +47,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private var searchView: SearchView? = null
     private var searchItem: MenuItem? = null
+    private var isDetecting = false
+    private var scanStartTime: Long = 0
+    private var lastMood = ""
+    private var moodCounter = 0
 
     companion object{
         lateinit var MusicListMA : ArrayList<Music>
@@ -49,6 +65,14 @@ class MainActivity : AppCompatActivity() {
         var sortOrder: Int = 0
         val sortingList = arrayOf(MediaStore.Audio.Media.DATE_ADDED + " DESC", MediaStore.Audio.Media.TITLE,
         MediaStore.Audio.Media.SIZE + " DESC")
+    }
+
+    private val requestCameraPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+        if (isGranted) {
+            startCamera()
+        } else {
+            Toast.makeText(this, "Camera permission required for mood detection", Toast.LENGTH_SHORT).show()
+        }
     }
 
 
@@ -227,6 +251,230 @@ class MainActivity : AppCompatActivity() {
             musicAdapter.updateMusicList(MusicListMA)
 
             binding.refreshLayout.isRefreshing = false
+        }
+
+        binding.btnHappy.setOnClickListener { playHappySongs() }
+        binding.btnSad.setOnClickListener { playSadSongs() }
+        binding.btnEnergetic.setOnClickListener { playEnergeticSongs() }
+        // binding.btnCalm.setOnClickListener { playCalmSongs() } // Removed Calm button listener
+        binding.btnDetectMood.setOnClickListener { checkCameraPermissionAndOpen() }
+    }
+
+    private fun checkCameraPermissionAndOpen() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            startCamera()
+        } else {
+            requestCameraPermissionLauncher.launch(android.Manifest.permission.CAMERA)
+        }
+    }
+
+    private fun startCamera() {
+        // Show the preview view
+        binding.previewView.visibility = View.VISIBLE
+        binding.tvMoodEmoji.visibility = View.GONE
+        isDetecting = true
+        scanStartTime = System.currentTimeMillis() // Start timer
+        lastMood = ""
+        moodCounter = 0
+        Toast.makeText(this, "Scanning face... Hold still!", Toast.LENGTH_SHORT).show()
+        
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+
+        cameraProviderFuture.addListener({
+            val cameraProvider = cameraProviderFuture.get()
+
+            // Preview
+            val preview = Preview.Builder().build()
+            preview.setSurfaceProvider(binding.previewView.surfaceProvider)
+
+            // ImageAnalysis
+            val imageAnalysis = ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build()
+            
+            imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(this)) { imageProxy ->
+                val mediaImage = imageProxy.image
+                if (mediaImage != null && isDetecting) {
+                    val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
+                    detectEmotion(image, imageProxy, cameraProvider)
+                } else {
+                    imageProxy.close()
+                }
+            }
+
+            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+
+            try {
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(
+                    this, cameraSelector, preview, imageAnalysis
+                )
+            } catch(exc: Exception) {
+                Toast.makeText(this, "Use camera failed", Toast.LENGTH_SHORT).show()
+            }
+
+        }, ContextCompat.getMainExecutor(this))
+    }
+
+    private fun detectEmotion(image: InputImage, imageProxy: androidx.camera.core.ImageProxy, cameraProvider: ProcessCameraProvider) {
+        val options = FaceDetectorOptions.Builder()
+            .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST) // Use FAST for real-time
+            .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
+            .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
+            .build()
+            
+        val detector = FaceDetection.getClient(options)
+        
+        detector.process(image)
+            .addOnSuccessListener { faces ->
+                if (!isDetecting) {
+                    imageProxy.close()
+                    return@addOnSuccessListener
+                }
+
+                if (faces.isNotEmpty()) {
+                    val face = faces[0]
+                    val smileProb = face.smilingProbability ?: 0f
+                    val leftEyeOpenProb = face.leftEyeOpenProbability ?: 0f
+                    val rightEyeOpenProb = face.rightEyeOpenProbability ?: 0f
+                    
+                    var currentMood = ""
+                    
+                    if (smileProb > 0.75) {
+                         currentMood = "HAPPY"
+                    } 
+                    else if (smileProb < 0.2) {
+                         currentMood = "SAD"
+                    }
+                    else if (leftEyeOpenProb > 0.8 && rightEyeOpenProb > 0.8) {
+                         currentMood = "ENERGETIC"
+                    }
+                    
+                    if (currentMood.isNotEmpty()) {
+                        stabilizeMood(currentMood, cameraProvider)
+                    } else {
+                        // Reset counter if mood is unstable or neutral
+                        moodCounter = 0
+                        lastMood = ""
+                    }
+                }
+                imageProxy.close()
+            }
+            .addOnFailureListener {
+                imageProxy.close()
+            }
+    }
+
+    private fun stabilizeMood(mood: String, cameraProvider: ProcessCameraProvider) {
+        if (mood == lastMood) {
+            moodCounter++
+            // Require 5 consecutive frames (approx 0.5 - 1 second) of same mood
+            if (moodCounter >= 5) {
+                isDetecting = false
+                cameraProvider.unbindAll()
+                binding.previewView.visibility = View.GONE
+                handleMood(mood)
+            }
+        } else {
+            lastMood = mood
+            moodCounter = 1
+        }
+    }
+    
+    private fun handleMood(mood: String) {
+        showMoodEmoji(mood)
+        Toast.makeText(this, "Detected Mood: $mood", Toast.LENGTH_SHORT).show()
+        when (mood) {
+            "HAPPY" -> playHappySongs()
+            "SAD" -> playSadSongs()
+            "ENERGETIC" -> playEnergeticSongs()
+        }
+    }
+
+    private fun showMoodEmoji(mood: String) {
+        val emojiText = when (mood) {
+            "HAPPY" -> "😄"
+            "SAD" -> "😢"
+            "ENERGETIC" -> "⚡"
+            else -> ""
+        }
+        
+        binding.tvMoodEmoji.text = emojiText
+        binding.tvMoodEmoji.visibility = View.VISIBLE
+        binding.tvMoodEmoji.alpha = 0f
+        binding.tvMoodEmoji.scaleX = 0.5f
+        binding.tvMoodEmoji.scaleY = 0.5f
+
+        binding.tvMoodEmoji.animate()
+            .alpha(1f)
+            .scaleX(1.2f)
+            .scaleY(1.2f)
+            .setDuration(500)
+            .withEndAction {
+                binding.tvMoodEmoji.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .alpha(0f)
+                    .setStartDelay(1000)
+                    .setDuration(500)
+                    .withEndAction {
+                        binding.tvMoodEmoji.visibility = View.GONE
+                    }
+            }
+    }
+
+    private fun playHappySongs() {
+        musicListSearch = ArrayList(MusicListMA.filter { it.duration < 240000 })
+        if (musicListSearch.isNotEmpty()) {
+            search = true
+            musicAdapter.updateMusicList(musicListSearch)
+            val intent = Intent(this, PlayerActivity::class.java)
+            intent.putExtra("index", 0)
+            intent.putExtra("class", "MusicAdapterSearch")
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "No happy songs found!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun playSadSongs() {
+        musicListSearch = ArrayList(MusicListMA.filter { it.duration >= 240000 })
+        if (musicListSearch.isNotEmpty()) {
+            search = true
+            musicAdapter.updateMusicList(musicListSearch)
+            val intent = Intent(this, PlayerActivity::class.java)
+            intent.putExtra("index", 0)
+            intent.putExtra("class", "MusicAdapterSearch")
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "No sad songs found!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun playEnergeticSongs() {
+        musicListSearch = ArrayList(MusicListMA)
+        musicListSearch.shuffle()
+        if (musicListSearch.isNotEmpty()) {
+            search = true
+            musicAdapter.updateMusicList(musicListSearch)
+            val intent = Intent(this, PlayerActivity::class.java)
+            intent.putExtra("index", 0)
+            intent.putExtra("class", "MusicAdapterSearch")
+            startActivity(intent)
+        }
+    }
+
+    private fun playCalmSongs() {
+        musicListSearch = ArrayList(MusicListMA.filter { it.duration > 180000 })
+        if (musicListSearch.isNotEmpty()) {
+            search = true
+            musicAdapter.updateMusicList(musicListSearch)
+            val intent = Intent(this, PlayerActivity::class.java)
+            intent.putExtra("index", 0)
+            intent.putExtra("class", "MusicAdapterSearch")
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "No calm songs found!", Toast.LENGTH_SHORT).show()
         }
     }
 

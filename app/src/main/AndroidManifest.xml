@@ -18,6 +18,9 @@
     <!-- Internet Permission for Login -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- Camera Permission -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".ApplicationClass"
         android:allowBackup="true"

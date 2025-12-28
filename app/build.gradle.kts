@@ -74,4 +74,13 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
+
+    // CameraX
+    val cameraxVersion = "1.3.0"
+    implementation("androidx.camera:camera-camera2:$cameraxVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
+    implementation("androidx.camera:camera-view:$cameraxVersion")
+
+    // Google ML Kit Face Detection
+    implementation("com.google.mlkit:face-detection:16.1.5")
 }

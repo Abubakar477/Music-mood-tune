@@ -9,6 +9,7 @@
     tools:context=".MainActivity"
     android:background="@color/spotify_black">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -45,6 +46,153 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="How are you feeling?"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="12dp"/>
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginBottom="16dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="4dp">
+
+                            <Button
+                                android:id="@+id/btnDetectMood"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="DETECT MOOD 📷"
+                                android:layout_marginEnd="12dp"/>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/btnHappy"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="12dp"
+                                app:cardBackgroundColor="#1A1A1A"
+                                app:cardCornerRadius="24dp"
+                                app:cardElevation="0dp"
+                                app:strokeColor="#333333"
+                                app:strokeWidth="1dp"
+                                android:clickable="true"
+                                android:focusable="true">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:paddingHorizontal="16dp"
+                                    android:paddingVertical="12dp"
+                                    android:gravity="center">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="😄"
+                                        android:textSize="18sp"
+                                        android:layout_marginEnd="8dp"/>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Happy"
+                                        android:textColor="@color/white"
+                                        android:textStyle="bold"
+                                        android:textSize="14sp"/>
+                                </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/btnSad"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="12dp"
+                                app:cardBackgroundColor="#1A1A1A"
+                                app:cardCornerRadius="24dp"
+                                app:cardElevation="0dp"
+                                app:strokeColor="#333333"
+                                app:strokeWidth="1dp"
+                                android:clickable="true"
+                                android:focusable="true">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:paddingHorizontal="16dp"
+                                    android:paddingVertical="12dp"
+                                    android:gravity="center">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="😢"
+                                        android:textSize="18sp"
+                                        android:layout_marginEnd="8dp"/>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Sad"
+                                        android:textColor="@color/white"
+                                        android:textStyle="bold"
+                                        android:textSize="14sp"/>
+                                </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/btnEnergetic"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="12dp"
+                                app:cardBackgroundColor="#1A1A1A"
+                                app:cardCornerRadius="24dp"
+                                app:cardElevation="0dp"
+                                app:strokeColor="#333333"
+                                app:strokeWidth="1dp"
+                                android:clickable="true"
+                                android:focusable="true">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:paddingHorizontal="16dp"
+                                    android:paddingVertical="12dp"
+                                    android:gravity="center">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="⚡"
+                                        android:textSize="18sp"
+                                        android:layout_marginEnd="8dp"/>
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Energetic"
+                                        android:textColor="@color/white"
+                                        android:textStyle="bold"
+                                        android:textSize="14sp"/>
+                                </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <androidx.camera.view.PreviewView
+                        android:id="@+id/previewView"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/greetingText"
@@ -241,6 +389,19 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <TextView
+            android:id="@+id/tvMoodEmoji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="100sp"
+            android:text="😄"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:elevation="10dp"/>
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nowPlaying"
