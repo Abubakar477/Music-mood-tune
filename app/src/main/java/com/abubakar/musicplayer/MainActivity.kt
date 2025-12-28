@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
     private var scanStartTime: Long = 0
     private var lastMood = ""
     private var moodCounter = 0
+    private var lastHappySongId = ""
 
     companion object{
         lateinit var MusicListMA : ArrayList<Music>
@@ -426,6 +427,16 @@ class MainActivity : AppCompatActivity() {
     private fun playHappySongs() {
         musicListSearch = ArrayList(MusicListMA.filter { it.duration < 240000 })
         if (musicListSearch.isNotEmpty()) {
+            musicListSearch.shuffle()
+            
+            // Ensure different song if possible
+            if (musicListSearch.size > 1 && musicListSearch[0].id == lastHappySongId) {
+                val temp = musicListSearch[0]
+                musicListSearch[0] = musicListSearch[1]
+                musicListSearch[1] = temp
+            }
+            lastHappySongId = musicListSearch[0].id
+            
             search = true
             musicAdapter.updateMusicList(musicListSearch)
             val intent = Intent(this, PlayerActivity::class.java)
