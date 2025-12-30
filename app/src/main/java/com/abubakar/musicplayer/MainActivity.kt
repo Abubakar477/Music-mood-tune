@@ -17,11 +17,13 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -39,6 +41,7 @@ import com.google.mlkit.vision.face.FaceDetectorOptions
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.math.abs
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -50,8 +53,15 @@ class MainActivity : AppCompatActivity() {
     private var isDetecting = false
     private var scanStartTime: Long = 0
     private var lastMood = ""
-    private var moodCounter = 0
+    private var stableMoodStartTime: Long = 0
     private var lastHappySongId = ""
+    private var lastSadSongId = ""
+    private var lastEnergeticSongId = ""
+    
+    // Blinking detection variables
+    private var lastBlinkTime: Long = 0
+    private var blinkCount: Int = 0
+    private var areEyesClosedPrev: Boolean = false
 
     companion object{
         lateinit var MusicListMA : ArrayList<Music>
@@ -269,6 +279,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @OptIn(ExperimentalGetImage::class)
     private fun startCamera() {
         // Show the preview view
         binding.previewView.visibility = View.VISIBLE
@@ -276,7 +287,10 @@ class MainActivity : AppCompatActivity() {
         isDetecting = true
         scanStartTime = System.currentTimeMillis() // Start timer
         lastMood = ""
-        moodCounter = 0
+        stableMoodStartTime = 0
+        blinkCount = 0
+        areEyesClosedPrev = false
+        lastBlinkTime = 0
         Toast.makeText(this, "Scanning face... Hold still!", Toast.LENGTH_SHORT).show()
         
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
@@ -341,21 +355,36 @@ class MainActivity : AppCompatActivity() {
                     
                     var currentMood = ""
                     
-                    if (smileProb > 0.75) {
+                    // Blinking detection
+                    val isEyesClosed = leftEyeOpenProb < 0.5 && rightEyeOpenProb < 0.5
+                    
+                    if (isEyesClosed && !areEyesClosedPrev) {
+                        val now = System.currentTimeMillis()
+                        // If previous blink was within 1000ms, count it
+                        if (now - lastBlinkTime < 1000) {
+                            blinkCount++
+                        } else {
+                            blinkCount = 1
+                        }
+                        lastBlinkTime = now
+                    }
+                    areEyesClosedPrev = isEyesClosed
+                    
+                    if (blinkCount >= 3) {
+                         currentMood = "ENERGETIC"
+                    } 
+                    else if (smileProb > 0.75) {
                          currentMood = "HAPPY"
                     } 
                     else if (smileProb < 0.2) {
                          currentMood = "SAD"
                     }
-                    else if (leftEyeOpenProb > 0.8 && rightEyeOpenProb > 0.8) {
-                         currentMood = "ENERGETIC"
-                    }
                     
                     if (currentMood.isNotEmpty()) {
                         stabilizeMood(currentMood, cameraProvider)
                     } else {
-                        // Reset counter if mood is unstable or neutral
-                        moodCounter = 0
+                        // Reset if mood is unstable or neutral (but don't reset blink variables here)
+                        stableMoodStartTime = 0
                         lastMood = ""
                     }
                 }
@@ -367,10 +396,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun stabilizeMood(mood: String, cameraProvider: ProcessCameraProvider) {
+        if (mood == "ENERGETIC") {
+            // Immediate trigger for blinking sequence
+            isDetecting = false
+            cameraProvider.unbindAll()
+            binding.previewView.visibility = View.GONE
+            handleMood(mood)
+            return
+        }
+
         if (mood == lastMood) {
-            moodCounter++
-            // Require 5 consecutive frames (approx 0.5 - 1 second) of same mood
-            if (moodCounter >= 5) {
+            if (stableMoodStartTime == 0L) {
+                stableMoodStartTime = System.currentTimeMillis()
+            }
+            val duration = System.currentTimeMillis() - stableMoodStartTime
+            // Require 1 second (1000ms) of consistent mood - Faster than before
+            if (duration >= 1000) {
                 isDetecting = false
                 cameraProvider.unbindAll()
                 binding.previewView.visibility = View.GONE
@@ -378,7 +419,7 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             lastMood = mood
-            moodCounter = 1
+            stableMoodStartTime = System.currentTimeMillis()
         }
     }
     
@@ -451,6 +492,15 @@ class MainActivity : AppCompatActivity() {
     private fun playSadSongs() {
         musicListSearch = ArrayList(MusicListMA.filter { it.duration >= 240000 })
         if (musicListSearch.isNotEmpty()) {
+            musicListSearch.shuffle()
+            
+            if (musicListSearch.size > 1 && musicListSearch[0].id == lastSadSongId) {
+                val temp = musicListSearch[0]
+                musicListSearch[0] = musicListSearch[1]
+                musicListSearch[1] = temp
+            }
+            lastSadSongId = musicListSearch[0].id
+            
             search = true
             musicAdapter.updateMusicList(musicListSearch)
             val intent = Intent(this, PlayerActivity::class.java)
@@ -466,6 +516,13 @@ class MainActivity : AppCompatActivity() {
         musicListSearch = ArrayList(MusicListMA)
         musicListSearch.shuffle()
         if (musicListSearch.isNotEmpty()) {
+            if (musicListSearch.size > 1 && musicListSearch[0].id == lastEnergeticSongId) {
+                val temp = musicListSearch[0]
+                musicListSearch[0] = musicListSearch[1]
+                musicListSearch[1] = temp
+            }
+            lastEnergeticSongId = musicListSearch[0].id
+
             search = true
             musicAdapter.updateMusicList(musicListSearch)
             val intent = Intent(this, PlayerActivity::class.java)
