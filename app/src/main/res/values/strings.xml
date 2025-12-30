@@ -45,6 +45,6 @@
     <string name="favourite_note">Tip: Play Music And Click On &#10084; To Add It Into Favourites. </string>
     <string name="playlist_note">Tip: Click On ➕ To Create New Playlist. </string>
     
-    <!-- Placeholder for Google Web Client ID - REPLACE THIS WITH YOUR REAL ID FROM FIREBASE CONSOLE -->
-    <string name="default_web_client_id">YOUR_WEB_CLIENT_ID_HERE</string>
+    <!-- Google Web Client ID -->
+    <string name="default_web_client_id">851632860026-blhkqq6qrijv9ptdd5hhe896nhel6uuc.apps.googleusercontent.com</string>
 </resources>

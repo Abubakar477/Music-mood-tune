@@ -38,356 +38,412 @@
             app:layout_constraintTop_toBottomOf="@id/appBarLayout"
             app:layout_constraintBottom_toTopOf="@id/nowPlaying">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="How are you feeling?"
+                    <Switch
+                        android:id="@+id/modeSwitch"
+                        android:text="Auto Mood Detection"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="12dp"/>
+                        android:checked="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
-                    <HorizontalScrollView
+                    <SeekBar
+                        android:id="@+id/moodSeekBar"
+                        android:max="3"
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:scrollbars="none"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginBottom="16dp">
+                        android:paddingTop="10dp"/>
+                        
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="10dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Sad"
+                            android:textSize="12sp"
+                            android:textColor="@color/spotify_light_gray"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Calm"
+                            android:gravity="center"
+                            android:textSize="12sp"
+                            android:textColor="@color/spotify_light_gray"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Happy"
+                            android:gravity="center"
+                            android:textSize="12sp"
+                            android:textColor="@color/spotify_light_gray"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Energetic"
+                            android:gravity="end"
+                            android:textSize="12sp"
+                            android:textColor="@color/spotify_light_gray"/>
+                    </LinearLayout>
 
-                        <LinearLayout
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="How are you feeling?"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="12dp"/>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="16dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="4dp">
+
+                        <Button
+                            android:id="@+id/btnDetectMood"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingBottom="4dp">
+                            android:text="DETECT MOOD 📷"
+                            android:layout_marginEnd="12dp"/>
 
-                            <Button
-                                android:id="@+id/btnDetectMood"
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/btnHappy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp"
+                            app:cardBackgroundColor="#1A1A1A"
+                            app:cardCornerRadius="24dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="#333333"
+                            app:strokeWidth="1dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="DETECT MOOD 📷"
-                                android:layout_marginEnd="12dp"/>
-
-                            <com.google.android.material.card.MaterialCardView
-                                android:id="@+id/btnHappy"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="12dp"
-                                app:cardBackgroundColor="#1A1A1A"
-                                app:cardCornerRadius="24dp"
-                                app:cardElevation="0dp"
-                                app:strokeColor="#333333"
-                                app:strokeWidth="1dp"
-                                android:clickable="true"
-                                android:focusable="true">
-                                <LinearLayout
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="16dp"
+                                android:paddingVertical="12dp"
+                                android:gravity="center">
+                                <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:paddingHorizontal="16dp"
-                                    android:paddingVertical="12dp"
-                                    android:gravity="center">
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="😄"
-                                        android:textSize="18sp"
-                                        android:layout_marginEnd="8dp"/>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Happy"
-                                        android:textColor="@color/white"
-                                        android:textStyle="bold"
-                                        android:textSize="14sp"/>
-                                </LinearLayout>
-                            </com.google.android.material.card.MaterialCardView>
-
-                            <com.google.android.material.card.MaterialCardView
-                                android:id="@+id/btnSad"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="12dp"
-                                app:cardBackgroundColor="#1A1A1A"
-                                app:cardCornerRadius="24dp"
-                                app:cardElevation="0dp"
-                                app:strokeColor="#333333"
-                                app:strokeWidth="1dp"
-                                android:clickable="true"
-                                android:focusable="true">
-                                <LinearLayout
+                                    android:text="😄"
+                                    android:textSize="18sp"
+                                    android:layout_marginEnd="8dp"/>
+                                <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:paddingHorizontal="16dp"
-                                    android:paddingVertical="12dp"
-                                    android:gravity="center">
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="😢"
-                                        android:textSize="18sp"
-                                        android:layout_marginEnd="8dp"/>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Sad"
-                                        android:textColor="@color/white"
-                                        android:textStyle="bold"
-                                        android:textSize="14sp"/>
-                                </LinearLayout>
-                            </com.google.android.material.card.MaterialCardView>
+                                    android:text="Happy"
+                                    android:textColor="@color/white"
+                                    android:textStyle="bold"
+                                    android:textSize="14sp"/>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
 
-                            <com.google.android.material.card.MaterialCardView
-                                android:id="@+id/btnEnergetic"
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/btnSad"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp"
+                            app:cardBackgroundColor="#1A1A1A"
+                            app:cardCornerRadius="24dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="#333333"
+                            app:strokeWidth="1dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="12dp"
-                                app:cardBackgroundColor="#1A1A1A"
-                                app:cardCornerRadius="24dp"
-                                app:cardElevation="0dp"
-                                app:strokeColor="#333333"
-                                app:strokeWidth="1dp"
-                                android:clickable="true"
-                                android:focusable="true">
-                                <LinearLayout
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="16dp"
+                                android:paddingVertical="12dp"
+                                android:gravity="center">
+                                <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:paddingHorizontal="16dp"
-                                    android:paddingVertical="12dp"
-                                    android:gravity="center">
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="⚡"
-                                        android:textSize="18sp"
-                                        android:layout_marginEnd="8dp"/>
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Energetic"
-                                        android:textColor="@color/white"
-                                        android:textStyle="bold"
-                                        android:textSize="14sp"/>
-                                </LinearLayout>
-                            </com.google.android.material.card.MaterialCardView>
+                                    android:text="😢"
+                                    android:textSize="18sp"
+                                    android:layout_marginEnd="8dp"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Sad"
+                                    android:textColor="@color/white"
+                                    android:textStyle="bold"
+                                    android:textSize="14sp"/>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
 
-                        </LinearLayout>
-                    </HorizontalScrollView>
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/btnEnergetic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp"
+                            app:cardBackgroundColor="#1A1A1A"
+                            app:cardCornerRadius="24dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="#333333"
+                            app:strokeWidth="1dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="16dp"
+                                android:paddingVertical="12dp"
+                                android:gravity="center">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="⚡"
+                                    android:textSize="18sp"
+                                    android:layout_marginEnd="8dp"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Energetic"
+                                    android:textColor="@color/white"
+                                    android:textStyle="bold"
+                                    android:textSize="14sp"/>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
 
-                    <androidx.camera.view.PreviewView
-                        android:id="@+id/previewView"
-                        android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:visibility="gone"/>
+                    </LinearLayout>
+                </HorizontalScrollView>
 
-                    <TextView
-                        android:id="@+id/greetingText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Good Evening"
-                        android:textColor="@color/white"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="16dp"/>
+                <androidx.camera.view.PreviewView
+                    android:id="@+id/previewView"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/greetingText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Good Evening"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="10dp"
+                    android:paddingBottom="10dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingHorizontal="10dp"
-                        android:paddingBottom="10dp">
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginBottom="8dp">
-
-                            <com.google.android.material.card.MaterialCardView
-                                android:id="@+id/favouriteBtn"
-                                android:layout_width="0dp"
-                                android:layout_height="60dp"
-                                android:layout_weight="1"
-                                android:layout_marginEnd="4dp"
-                                app:cardBackgroundColor="@android:color/transparent"
-                                app:cardCornerRadius="4dp"
-                                app:cardElevation="0dp"
-                                android:clickable="true"
-                                android:focusable="true">
-                                <LinearLayout
-                                    android:layout_width="match_parent"
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/favouriteBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="4dp"
+                            app:cardBackgroundColor="@android:color/transparent"
+                            app:cardCornerRadius="4dp"
+                            app:cardElevation="0dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:background="@drawable/gradient_purple">
+                                <ImageView
+                                    android:layout_width="60dp"
                                     android:layout_height="match_parent"
-                                    android:orientation="horizontal"
-                                    android:gravity="center_vertical"
-                                    android:background="@drawable/gradient_purple">
-                                    <ImageView
-                                        android:layout_width="60dp"
-                                        android:layout_height="match_parent"
-                                        android:src="@drawable/favourite_icon"
-                                        android:padding="16dp"
-                                        app:tint="@color/white"
-                                        android:background="#33000000" />
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/favourites_btn"
-                                        android:textColor="@color/white"
-                                        android:textStyle="bold"
-                                        android:layout_marginStart="8dp"
-                                        android:textSize="12sp"/>
-                                </LinearLayout>
-                            </com.google.android.material.card.MaterialCardView>
+                                    android:src="@drawable/favourite_icon"
+                                    android:padding="16dp"
+                                    app:tint="@color/white"
+                                    android:background="#33000000" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/favourites_btn"
+                                    android:textColor="@color/white"
+                                    android:textStyle="bold"
+                                    android:layout_marginStart="8dp"
+                                    android:textSize="12sp"/>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
 
-                            <com.google.android.material.card.MaterialCardView
-                                android:id="@+id/playlistBtn"
-                                android:layout_width="0dp"
-                                android:layout_height="60dp"
-                                android:layout_weight="1"
-                                android:layout_marginStart="4dp"
-                                app:cardBackgroundColor="@color/spotify_card"
-                                app:cardCornerRadius="4dp"
-                                app:cardElevation="0dp"
-                                android:clickable="true"
-                                android:focusable="true">
-                                <LinearLayout
-                                    android:layout_width="match_parent"
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/playlistBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="4dp"
+                            app:cardBackgroundColor="@color/spotify_card"
+                            app:cardCornerRadius="4dp"
+                            app:cardElevation="0dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+                                <ImageView
+                                    android:layout_width="60dp"
                                     android:layout_height="match_parent"
-                                    android:orientation="horizontal"
-                                    android:gravity="center_vertical">
-                                    <ImageView
-                                        android:layout_width="60dp"
-                                        android:layout_height="match_parent"
-                                        android:src="@drawable/playlist_icon"
-                                        android:padding="16dp"
-                                        app:tint="@color/white"
-                                        android:background="#333333" />
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/playlist_btn"
-                                        android:textColor="@color/white"
-                                        android:textStyle="bold"
-                                        android:layout_marginStart="8dp"
-                                        android:textSize="12sp"/>
-                                </LinearLayout>
-                            </com.google.android.material.card.MaterialCardView>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.card.MaterialCardView
-                                android:id="@+id/shuffleBtn"
-                                android:layout_width="0dp"
-                                android:layout_height="60dp"
-                                android:layout_weight="1"
-                                android:layout_marginEnd="4dp"
-                                app:cardBackgroundColor="@color/spotify_card"
-                                app:cardCornerRadius="4dp"
-                                app:cardElevation="0dp"
-                                android:clickable="true"
-                                android:focusable="true">
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal"
-                                    android:gravity="center_vertical">
-                                    <ImageView
-                                        android:layout_width="60dp"
-                                        android:layout_height="match_parent"
-                                        android:src="@drawable/shuffle_icon"
-                                        android:padding="16dp"
-                                        app:tint="@color/white"
-                                        android:background="#333333" />
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/shuffle_btn"
-                                        android:textColor="@color/white"
-                                        android:textStyle="bold"
-                                        android:layout_marginStart="8dp"
-                                        android:textSize="12sp"/>
-                                </LinearLayout>
-                            </com.google.android.material.card.MaterialCardView>
-
-                            <com.google.android.material.card.MaterialCardView
-                                android:id="@+id/playNextBtn"
-                                android:layout_width="0dp"
-                                android:layout_height="60dp"
-                                android:layout_weight="1"
-                                android:layout_marginStart="4dp"
-                                app:cardBackgroundColor="@color/spotify_card"
-                                app:cardCornerRadius="4dp"
-                                app:cardElevation="0dp"
-                                android:clickable="true"
-                                android:focusable="true">
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal"
-                                    android:gravity="center_vertical">
-                                    <ImageView
-                                        android:layout_width="60dp"
-                                        android:layout_height="match_parent"
-                                        android:src="@drawable/play_next_icon"
-                                        android:padding="16dp"
-                                        app:tint="@color/white"
-                                        android:background="#333333" />
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/play_next"
-                                        android:textColor="@color/white"
-                                        android:textStyle="bold"
-                                        android:layout_marginStart="8dp"
-                                        android:textSize="12sp"/>
-                                </LinearLayout>
-                            </com.google.android.material.card.MaterialCardView>
-
-                        </LinearLayout>
+                                    android:src="@drawable/playlist_icon"
+                                    android:padding="16dp"
+                                    app:tint="@color/white"
+                                    android:background="#333333" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/playlist_btn"
+                                    android:textColor="@color/white"
+                                    android:textStyle="bold"
+                                    android:layout_marginStart="8dp"
+                                    android:textSize="12sp"/>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/totalSongs"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="@string/total_songs"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:textColor="@color/white" />
+                        android:orientation="horizontal">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/musicRV"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scrollbarThumbVertical="@drawable/scroll_bar_icon"
-                        android:scrollbars="vertical" />
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/shuffleBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="4dp"
+                            app:cardBackgroundColor="@color/spotify_card"
+                            app:cardCornerRadius="4dp"
+                            app:cardElevation="0dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+                                <ImageView
+                                    android:layout_width="60dp"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/shuffle_icon"
+                                    android:padding="16dp"
+                                    app:tint="@color/white"
+                                    android:background="#333333" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/shuffle_btn"
+                                    android:textColor="@color/white"
+                                    android:textStyle="bold"
+                                    android:layout_marginStart="8dp"
+                                    android:textSize="12sp"/>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/playNextBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="4dp"
+                            app:cardBackgroundColor="@color/spotify_card"
+                            app:cardCornerRadius="4dp"
+                            app:cardElevation="0dp"
+                            android:clickable="true"
+                            android:focusable="true">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+                                <ImageView
+                                    android:layout_width="60dp"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/play_next_icon"
+                                    android:padding="16dp"
+                                    app:tint="@color/white"
+                                    android:background="#333333" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/play_next"
+                                    android:textColor="@color/white"
+                                    android:textStyle="bold"
+                                    android:layout_marginStart="8dp"
+                                    android:textSize="12sp"/>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/totalSongs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/total_songs"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="@color/white" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/musicRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:scrollbarThumbVertical="@drawable/scroll_bar_icon"
+                    android:scrollbars="vertical" />
+
+            </LinearLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <TextView

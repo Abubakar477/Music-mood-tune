@@ -1,0 +1,45 @@
+!!! IMPORTANT: YOU MUST DO THESE STEPS TO FIX THE LOGIN !!!
+
+The error in your screenshot "Please configure Firebase..." means you skipped a required step. The app cannot log in because it doesn't know your Firebase project's ID.
+
+STEP 1: GET YOUR WEB CLIENT ID
+1. Open your browser and go to: https://console.firebase.google.com/
+2. Click on your project "Music Player".
+3. Click "Authentication" in the left menu.
+4. Click the "Sign-in method" tab.
+5. Click on "Google" (the row where it says Enabled).
+6. Look for "Web SDK configuration".
+7. Copy the long text under "Web client ID".
+   It looks like this: 123456789-abcdefghijk.apps.googleusercontent.com
+
+STEP 2: PASTE IT INTO THE APP
+1. In Android Studio, open this file:
+   app > src > main > res > values > strings.xml
+2. Find this line:
+   <string name="default_web_client_id">YOUR_WEB_CLIENT_ID_HERE</string>
+3. Delete "YOUR_WEB_CLIENT_ID_HERE" and paste the ID you copied.
+   It should look like:
+   <string name="default_web_client_id">123456789-abcdefghijk.apps.googleusercontent.com</string>
+
+STEP 3: FIX THE "CONNECTION ERROR" (SHA-1 KEY)
+If the loading spinner spins forever and says "Connection Timeout", you are missing the SHA-1 Key.
+1. In Android Studio, look at the Right Sidebar and click "Gradle".
+2. Open the folders: Music Player > Tasks > android > signingReport.
+3. Double-click "signingReport".
+4. Look at the text output at the bottom of the screen.
+5. Find "SHA1: 5E:8F:16:..." (it's a long code with numbers and colons). Copy it.
+6. Go back to Firebase Console (website).
+7. Click the Gear Icon (Settings) > Project Settings.
+8. Scroll down to "Your apps".
+9. Click "Add fingerprint".
+10. Paste the SHA1 key and save.
+11. VERY IMPORTANT: Download "google-services.json" again and replace the file in your "app" folder.
+
+STEP 4: FIX EMULATOR INTERNET
+If it still fails, your emulator might not have internet.
+1. Close the emulator.
+2. Open Android Studio Device Manager.
+3. Click the 3 dots next to your emulator > "Wipe Data".
+4. Start the emulator again.
+
+NOW RUN THE APP. IT WILL WORK.

@@ -1,8 +1,3 @@
 package com.abubakar.musicplayer
 
-enum class Mood {
-    HAPPY,
-    SAD,
-    ENERGETIC,
-    CALM
-}
+// Enum moved to MoodController.kt

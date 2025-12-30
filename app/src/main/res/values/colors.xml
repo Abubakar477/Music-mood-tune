@@ -20,4 +20,14 @@
     <color name="spotify_card">#282828</color>
     <color name="spotify_dark_gray">#535353</color>
     <color name="spotify_light_gray">#B3B3B3</color>
+
+    <!-- Mood Colors -->
+    <color name="happy_bg">#FFF59D</color>
+    <color name="happy_accent">#FBC02D</color>
+    <color name="sad_bg">#90CAF9</color>
+    <color name="sad_accent">#1976D2</color>
+    <color name="energy_bg">#FF8A65</color>
+    <color name="energy_accent">#D84315</color>
+    <color name="calm_bg">#A5D6A7</color>
+    <color name="calm_accent">#388E3C</color>
 </resources>

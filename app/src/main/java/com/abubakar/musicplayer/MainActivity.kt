@@ -14,6 +14,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.SeekBar
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,6 +31,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
@@ -46,7 +49,7 @@ import kotlin.math.abs
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var toggle: ActionBarDrawerToggle
-    private lateinit var musicAdapter: MusicAdapter
+    private var musicAdapter: MusicAdapter? = null // Change to nullable to prevent crash
     private lateinit var auth: FirebaseAuth
     private var searchView: SearchView? = null
     private var searchItem: MenuItem? = null
@@ -57,6 +60,7 @@ class MainActivity : AppCompatActivity() {
     private var lastHappySongId = ""
     private var lastSadSongId = ""
     private var lastEnergeticSongId = ""
+    private var lastCalmSongId = ""
     
     // Blinking detection variables
     private var lastBlinkTime: Long = 0
@@ -149,6 +153,11 @@ class MainActivity : AppCompatActivity() {
         binding.navView.setNavigationItemSelectedListener{
             when(it.itemId)
             {
+                R.id.navHome -> {
+                     binding.root.closeDrawer(GravityCompat.START)
+                }
+                R.id.navLibrary -> startActivity(Intent(this@MainActivity, PlaylistActivity::class.java))
+                R.id.navFavourites -> startActivity(Intent(this@MainActivity, FavouriteActivity::class.java))
 //                R.id.navFeedback -> startActivity(Intent(this@MainActivity, FeedbackActivity::class.java))
                 R.id.navSettings -> startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
                 R.id.navAbout -> startActivity(Intent(this@MainActivity, AboutActivity::class.java))
@@ -190,10 +199,6 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         Toast.makeText(this, "Search not available", Toast.LENGTH_SHORT).show()
                     }
-                    true
-                }
-                R.id.bottom_nav_library -> {
-                    startActivity(Intent(this@MainActivity, PlaylistActivity::class.java))
                     true
                 }
                 R.id.bottom_nav_create -> {
@@ -254,21 +259,107 @@ class MainActivity : AppCompatActivity() {
         binding.musicRV.layoutManager = LinearLayoutManager(this@MainActivity)
         musicAdapter = MusicAdapter(this@MainActivity, MusicListMA)
         binding.musicRV.adapter = musicAdapter
-        binding.totalSongs.text  = "Total Songs : "+musicAdapter.itemCount
+        binding.totalSongs.text  = "Total Songs : "+musicAdapter!!.itemCount
 
         //for refreshing layout on swipe from top
         binding.refreshLayout.setOnRefreshListener {
             MusicListMA = getAllAudio()
-            musicAdapter.updateMusicList(MusicListMA)
+            musicAdapter?.updateMusicList(MusicListMA)
 
             binding.refreshLayout.isRefreshing = false
         }
 
-        binding.btnHappy.setOnClickListener { playHappySongs() }
-        binding.btnSad.setOnClickListener { playSadSongs() }
-        binding.btnEnergetic.setOnClickListener { playEnergeticSongs() }
-        // binding.btnCalm.setOnClickListener { playCalmSongs() } // Removed Calm button listener
-        binding.btnDetectMood.setOnClickListener { checkCameraPermissionAndOpen() }
+        // Initialize Mood Controls
+        val modeSwitch = findViewById<Switch>(R.id.modeSwitch)
+        val moodSeekBar = findViewById<SeekBar>(R.id.moodSeekBar)
+
+        modeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            MoodController.isAutoMode = isChecked
+            moodSeekBar.isEnabled = !isChecked
+            binding.btnDetectMood.isEnabled = isChecked
+            if (!isChecked) {
+                // If switching to manual, ensure UI reflects current manual setting
+                // Or just keep the last set mood
+            }
+        }
+
+        moodSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (!fromUser) return
+
+                val mood = when (progress) {
+                    0 -> Mood.SAD
+                    1 -> Mood.CALM
+                    2 -> Mood.HAPPY
+                    3 -> Mood.ENERGETIC
+                    else -> Mood.HAPPY
+                }
+
+                MoodController.setManualMood(mood)
+                applyMoodTheme(mood)
+                playMoodMusic(mood)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+
+        binding.btnHappy.setOnClickListener { 
+            // Manual buttons can override if in manual mode? 
+            // Or force manual mode? Let's assume buttons are also manual triggers.
+             if(!MoodController.isAutoMode) {
+                 MoodController.setManualMood(Mood.HAPPY)
+                 moodSeekBar.progress = 2
+                 applyMoodTheme(Mood.HAPPY)
+                 playMoodMusic(Mood.HAPPY)
+             } else {
+                 playMoodMusic(Mood.HAPPY) // Just play logic if in auto mode but user clicks?
+                 // Or maybe we should prompt user to switch to manual mode.
+                 Toast.makeText(this, "Switch to Manual Mode to select mood manually", Toast.LENGTH_SHORT).show()
+             }
+        }
+        binding.btnSad.setOnClickListener { 
+             if(!MoodController.isAutoMode) {
+                 MoodController.setManualMood(Mood.SAD)
+                 moodSeekBar.progress = 0
+                 applyMoodTheme(Mood.SAD)
+                 playMoodMusic(Mood.SAD)
+             } else {
+                 Toast.makeText(this, "Switch to Manual Mode to select mood manually", Toast.LENGTH_SHORT).show()
+             }
+        }
+        binding.btnEnergetic.setOnClickListener { 
+             if(!MoodController.isAutoMode) {
+                 MoodController.setManualMood(Mood.ENERGETIC)
+                 moodSeekBar.progress = 3
+                 applyMoodTheme(Mood.ENERGETIC)
+                 playMoodMusic(Mood.ENERGETIC)
+             } else {
+                 Toast.makeText(this, "Switch to Manual Mode to select mood manually", Toast.LENGTH_SHORT).show()
+             }
+        }
+
+        binding.btnDetectMood.setOnClickListener { 
+            if(MoodController.isAutoMode) {
+                checkCameraPermissionAndOpen()
+            } else {
+                Toast.makeText(this, "Enable Auto Mood Detection first", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    
+    private fun applyMoodTheme(mood: Mood) {
+        val theme = MoodController.moodThemes[mood] ?: return
+        
+        // Change background color of root view
+        // Using window background or root layout background
+        binding.root.setBackgroundColor(ContextCompat.getColor(this, theme.background))
+        
+        // Change toolbar/appbar color
+        binding.appBarLayout.setBackgroundColor(ContextCompat.getColor(this, theme.accent))
+        
+        // Also update adapter to refresh card colors
+        musicAdapter?.notifyDataSetChanged()
     }
 
     private fun checkCameraPermissionAndOpen() {
@@ -353,7 +444,7 @@ class MainActivity : AppCompatActivity() {
                     val leftEyeOpenProb = face.leftEyeOpenProbability ?: 0f
                     val rightEyeOpenProb = face.rightEyeOpenProbability ?: 0f
                     
-                    var currentMood = ""
+                    var currentMood: Mood? = null
                     
                     // Blinking detection
                     val isEyesClosed = leftEyeOpenProb < 0.5 && rightEyeOpenProb < 0.5
@@ -371,16 +462,16 @@ class MainActivity : AppCompatActivity() {
                     areEyesClosedPrev = isEyesClosed
                     
                     if (blinkCount >= 3) {
-                         currentMood = "ENERGETIC"
+                         currentMood = Mood.ENERGETIC
                     } 
                     else if (smileProb > 0.75) {
-                         currentMood = "HAPPY"
+                         currentMood = Mood.HAPPY
                     } 
                     else if (smileProb < 0.2) {
-                         currentMood = "SAD"
+                         currentMood = Mood.SAD
                     }
                     
-                    if (currentMood.isNotEmpty()) {
+                    if (currentMood != null) {
                         stabilizeMood(currentMood, cameraProvider)
                     } else {
                         // Reset if mood is unstable or neutral (but don't reset blink variables here)
@@ -395,8 +486,8 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    private fun stabilizeMood(mood: String, cameraProvider: ProcessCameraProvider) {
-        if (mood == "ENERGETIC") {
+    private fun stabilizeMood(mood: Mood, cameraProvider: ProcessCameraProvider) {
+        if (mood == Mood.ENERGETIC) {
             // Immediate trigger for blinking sequence
             isDetecting = false
             cameraProvider.unbindAll()
@@ -405,12 +496,12 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        if (mood == lastMood) {
+        if (mood.name == lastMood) {
             if (stableMoodStartTime == 0L) {
                 stableMoodStartTime = System.currentTimeMillis()
             }
             val duration = System.currentTimeMillis() - stableMoodStartTime
-            // Require 1 second (1000ms) of consistent mood - Faster than before
+            // Require 1 second (1000ms) of consistent mood
             if (duration >= 1000) {
                 isDetecting = false
                 cameraProvider.unbindAll()
@@ -418,18 +509,26 @@ class MainActivity : AppCompatActivity() {
                 handleMood(mood)
             }
         } else {
-            lastMood = mood
+            lastMood = mood.name
             stableMoodStartTime = System.currentTimeMillis()
         }
     }
     
-    private fun handleMood(mood: String) {
-        showMoodEmoji(mood)
-        Toast.makeText(this, "Detected Mood: $mood", Toast.LENGTH_SHORT).show()
-        when (mood) {
-            "HAPPY" -> playHappySongs()
-            "SAD" -> playSadSongs()
-            "ENERGETIC" -> playEnergeticSongs()
+    private fun handleMood(mood: Mood) {
+        MoodController.setAutoMood(mood)
+        applyMoodTheme(mood)
+        
+        showMoodEmoji(mood.name)
+        Toast.makeText(this, "Detected Mood: ${mood.name}", Toast.LENGTH_SHORT).show()
+        playMoodMusic(mood)
+        
+        // Sync SeekBar UI
+        val seekBar = findViewById<SeekBar>(R.id.moodSeekBar)
+        when(mood) {
+            Mood.SAD -> seekBar.progress = 0
+            Mood.CALM -> seekBar.progress = 1
+            Mood.HAPPY -> seekBar.progress = 2
+            Mood.ENERGETIC -> seekBar.progress = 3
         }
     }
 
@@ -464,6 +563,17 @@ class MainActivity : AppCompatActivity() {
                     }
             }
     }
+    
+    private fun playMoodMusic(mood: Mood) {
+        if (musicAdapter == null) return // Safety check
+
+        when(mood) {
+            Mood.HAPPY -> playHappySongs()
+            Mood.SAD -> playSadSongs()
+            Mood.ENERGETIC -> playEnergeticSongs()
+            Mood.CALM -> playCalmSongs()
+        }
+    }
 
     private fun playHappySongs() {
         musicListSearch = ArrayList(MusicListMA.filter { it.duration < 240000 })
@@ -479,7 +589,7 @@ class MainActivity : AppCompatActivity() {
             lastHappySongId = musicListSearch[0].id
             
             search = true
-            musicAdapter.updateMusicList(musicListSearch)
+            musicAdapter?.updateMusicList(musicListSearch)
             val intent = Intent(this, PlayerActivity::class.java)
             intent.putExtra("index", 0)
             intent.putExtra("class", "MusicAdapterSearch")
@@ -502,7 +612,7 @@ class MainActivity : AppCompatActivity() {
             lastSadSongId = musicListSearch[0].id
             
             search = true
-            musicAdapter.updateMusicList(musicListSearch)
+            musicAdapter?.updateMusicList(musicListSearch)
             val intent = Intent(this, PlayerActivity::class.java)
             intent.putExtra("index", 0)
             intent.putExtra("class", "MusicAdapterSearch")
@@ -524,7 +634,7 @@ class MainActivity : AppCompatActivity() {
             lastEnergeticSongId = musicListSearch[0].id
 
             search = true
-            musicAdapter.updateMusicList(musicListSearch)
+            musicAdapter?.updateMusicList(musicListSearch)
             val intent = Intent(this, PlayerActivity::class.java)
             intent.putExtra("index", 0)
             intent.putExtra("class", "MusicAdapterSearch")
@@ -535,8 +645,18 @@ class MainActivity : AppCompatActivity() {
     private fun playCalmSongs() {
         musicListSearch = ArrayList(MusicListMA.filter { it.duration > 180000 })
         if (musicListSearch.isNotEmpty()) {
+            // Calm logic - similar to Sad but maybe different filter? 
+            // Existing logic was > 180000 (3 mins)
+            musicListSearch.shuffle()
+             if (musicListSearch.size > 1 && musicListSearch[0].id == lastCalmSongId) {
+                val temp = musicListSearch[0]
+                musicListSearch[0] = musicListSearch[1]
+                musicListSearch[1] = temp
+            }
+            lastCalmSongId = musicListSearch[0].id
+            
             search = true
-            musicAdapter.updateMusicList(musicListSearch)
+            musicAdapter?.updateMusicList(musicListSearch)
             val intent = Intent(this, PlayerActivity::class.java)
             intent.putExtra("index", 0)
             intent.putExtra("class", "MusicAdapterSearch")
@@ -625,7 +745,7 @@ class MainActivity : AppCompatActivity() {
         if(sortOrder != sortValue){
             sortOrder = sortValue
             MusicListMA = getAllAudio()
-            musicAdapter.updateMusicList(MusicListMA)
+            musicAdapter?.updateMusicList(MusicListMA)
         }
         if(PlayerActivity.musicService != null) binding.nowPlaying.visibility = View.VISIBLE
 
@@ -649,7 +769,7 @@ class MainActivity : AppCompatActivity() {
                         if(song.title.lowercase().contains(userInput))
                             musicListSearch.add(song)
                     search = true
-                    musicAdapter.updateMusicList(searchList = musicListSearch)
+                    musicAdapter?.updateMusicList(searchList = musicListSearch)
                 }
                 return true
             }
