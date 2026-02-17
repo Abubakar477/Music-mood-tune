@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.Switch
@@ -24,6 +26,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
@@ -61,6 +64,8 @@ class MainActivity : AppCompatActivity() {
     private var lastSadSongId = ""
     private var lastEnergeticSongId = ""
     private var lastCalmSongId = ""
+    private var lensFacing = CameraSelector.LENS_FACING_FRONT
+    private var originalBrightness: Float = -1f
     
     // Blinking detection variables
     private var lastBlinkTime: Long = 0
@@ -346,6 +351,17 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Enable Auto Mood Detection first", Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.btnSwitchCamera.setOnClickListener {
+            lensFacing = if (lensFacing == CameraSelector.LENS_FACING_BACK) {
+                CameraSelector.LENS_FACING_FRONT
+            } else {
+                CameraSelector.LENS_FACING_BACK
+            }
+            if (isDetecting) {
+                startCamera()
+            }
+        }
     }
     
     private fun applyMoodTheme(mood: Mood) {
@@ -383,7 +399,7 @@ class MainActivity : AppCompatActivity() {
         areEyesClosedPrev = false
         lastBlinkTime = 0
         Toast.makeText(this, "Scanning face... Hold still!", Toast.LENGTH_SHORT).show()
-        
+
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
         cameraProviderFuture.addListener({
@@ -397,7 +413,7 @@ class MainActivity : AppCompatActivity() {
             val imageAnalysis = ImageAnalysis.Builder()
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
-            
+
             imageAnalysis.setAnalyzer(ContextCompat.getMainExecutor(this)) { imageProxy ->
                 val mediaImage = imageProxy.image
                 if (mediaImage != null && isDetecting) {
@@ -408,18 +424,51 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+            val cameraSelector = CameraSelector.Builder()
+                .requireLensFacing(lensFacing)
+                .build()
 
             try {
                 cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
+                val camera = cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageAnalysis
                 )
-            } catch(exc: Exception) {
+                
+                if (lensFacing == CameraSelector.LENS_FACING_BACK) {
+                    if (camera.cameraInfo.hasFlashUnit()) {
+                        camera.cameraControl.enableTorch(true)
+                    }
+                } else {
+                    // Front camera "flash" effect: Maximize screen brightness and set background to white
+                    enableScreenFlash(true)
+                }
+                
+            } catch (exc: Exception) {
                 Toast.makeText(this, "Use camera failed", Toast.LENGTH_SHORT).show()
             }
 
         }, ContextCompat.getMainExecutor(this))
+    }
+
+    private fun enableScreenFlash(enable: Boolean) {
+        val layoutParams = window.attributes
+        if (enable) {
+            if (originalBrightness == -1f) {
+                originalBrightness = layoutParams.screenBrightness
+            }
+            layoutParams.screenBrightness = 1.0f
+            binding.root.setBackgroundColor(Color.WHITE)
+        } else {
+            layoutParams.screenBrightness = originalBrightness
+            // Reset background to current theme or default
+            val mood = MoodController.currentMood
+            if (mood != null) {
+                applyMoodTheme(mood)
+            } else {
+                binding.root.setBackgroundColor(ContextCompat.getColor(this, R.color.spotify_black))
+            }
+        }
+        window.attributes = layoutParams
     }
 
     private fun detectEmotion(image: InputImage, imageProxy: androidx.camera.core.ImageProxy, cameraProvider: ProcessCameraProvider) {
@@ -489,9 +538,7 @@ class MainActivity : AppCompatActivity() {
     private fun stabilizeMood(mood: Mood, cameraProvider: ProcessCameraProvider) {
         if (mood == Mood.ENERGETIC) {
             // Immediate trigger for blinking sequence
-            isDetecting = false
-            cameraProvider.unbindAll()
-            binding.previewView.visibility = View.GONE
+            stopDetection(cameraProvider)
             handleMood(mood)
             return
         }
@@ -503,9 +550,7 @@ class MainActivity : AppCompatActivity() {
             val duration = System.currentTimeMillis() - stableMoodStartTime
             // Require 1 second (1000ms) of consistent mood
             if (duration >= 1000) {
-                isDetecting = false
-                cameraProvider.unbindAll()
-                binding.previewView.visibility = View.GONE
+                stopDetection(cameraProvider)
                 handleMood(mood)
             }
         } else {
@@ -514,6 +559,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
     
+    private fun stopDetection(cameraProvider: ProcessCameraProvider) {
+        isDetecting = false
+        cameraProvider.unbindAll()
+        binding.previewView.visibility = View.GONE
+        if (lensFacing == CameraSelector.LENS_FACING_FRONT) {
+            enableScreenFlash(false)
+        }
+    }
+
     private fun handleMood(mood: Mood) {
         MoodController.setAutoMood(mood)
         applyMoodTheme(mood)

@@ -135,6 +135,13 @@
                             android:text="DETECT MOOD 📷"
                             android:layout_marginEnd="12dp"/>
 
+                        <ImageButton
+                            android:id="@+id/btnSwitchCamera"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/switch_camera_icon"
+                            android:layout_marginEnd="12dp"/>
+
                         <com.google.android.material.card.MaterialCardView
                             android:id="@+id/btnHappy"
                             android:layout_width="wrap_content"
@@ -188,7 +195,7 @@
                                 android:orientation="horizontal"
                                 android:paddingHorizontal="16dp"
                                 android:paddingVertical="12dp"
-                                android:gravity="center">
+                                android.gravity="center">
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -223,7 +230,7 @@
                                 android:orientation="horizontal"
                                 android:paddingHorizontal="16dp"
                                 android:paddingVertical="12dp"
-                                android:gravity="center">
+                                android.gravity="center">
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
